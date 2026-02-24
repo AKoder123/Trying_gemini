@@ -1,0 +1,92 @@
+:root {
+    --bg: #0a0b14;
+    --surface: #141625;
+    --accent: #4f46e5;
+    --text: #f8fafc;
+    --text-dim: #94a3b8;
+    --topOffset: 60px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+}
+
+.top-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: var(--topOffset);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: rgba(10, 11, 20, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+}
+
+#exportPdfBtn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#deck-container {
+    height: 100dvh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    padding-top: var(--topOffset);
+}
+
+.slide {
+    height: 100dvh;
+    width: 100%;
+    scroll-snap-align: start;
+    scroll-margin-top: var(--topOffset);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 10%;
+    position: relative;
+}
+
+.slide-section { background: linear-gradient(135deg, #0a0b14 0%, #1e1b4b 100%); }
+
+h1 { font-size: clamp(2.5rem, 8vh, 4.5rem); margin-bottom: 1rem; }
+h2 { color: var(--accent); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+p.sub { font-size: 1.5rem; color: var(--text-dim); margin-bottom: 2rem; }
+
+ul { list-style: none; }
+li { font-size: 1.25rem; margin-bottom: 1rem; padding-left: 1.5rem; position: relative; }
+li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.card { background: var(--surface); padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+
+/* Animation Classes [cite: 17, 18] */
+[data-animate] { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+.is-active [data-animate] { opacity: 1; transform: translateY(0); }
+.is-active [data-animate="delay-1"] { transition-delay: 0.2s; }
+.is-active [data-animate="delay-2"] { transition-delay: 0.4s; }
+
+/* Compact Mode [cite: 13] */
+@media (max-height: 600px) {
+    .slide { padding: 2rem 5%; }
+    h1 { font-size: 2rem; }
+    li { font-size: 1rem; margin-bottom: 0.5rem; }
+}
+
+/* PDF Export [cite: 48, 50, 52] */
+body.exportingPdf [data-animate] { opacity:1 !important; transform:none !important; transition:none !important; }
+#pdfStage { position:fixed; left:-10000px; top:0; width:1920px; height:1080px; overflow:hidden; background:#050611; }
+#pdfStage .slide { width:1920px; height:1080px; padding: 90px 96px; scroll-snap-align: none; }
